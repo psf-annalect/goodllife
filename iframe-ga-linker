@@ -1,0 +1,29 @@
+/**
+ * Method used to append the iframe source with
+ * the needed Google clientId for tracking.
+ * @param selects the DOM object that contains the formstack iframe.
+ * Used within on load event
+ */
+
+ function GALinker(elem) {
+     "use strict";
+     //try to return universal analytics clientId
+     if (typeof window.ga !== 'undefined') {
+         var source, clientId, append;
+         try {
+             source = elem.src;
+             clientId = ga.getAll()[0].get('clientId');
+             if (typeof clientId !== 'undefined') {
+                 if (source.indexOf('?') === -1) {
+                     source += '?';
+                 } else {
+                     source += '&';
+                 }
+                 append = source += '_cid=' + clientId;
+                 elem.src = append;
+             }
+         } catch (e) {
+             console.warn('client id for analytics could not be calculated');
+         }
+     }
+ }
